@@ -56,8 +56,8 @@ h1 {
   width: 70%;
   height: 70%;
   border-radius: 50%;
-  top: 10px;
-  left: 10px;
+  top: 15%;
+  left: 15%;
 }
 
 #board td .piece.one {
@@ -71,8 +71,8 @@ h1 {
 
 #board td div {
   position: absolute;
-  top: 10px;
-  left: 10px;
+  top: 15%;
+  left: 15%;
   border-radius: 50%;
   background-color: hsl(136, 27%, 47%);
   height: 70%;
