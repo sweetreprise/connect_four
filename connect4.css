@@ -46,8 +46,8 @@ h1 {
 
 #board td {
   background-color: hsl(235, 56%, 52%);
-  width: 70px;
-  height: 70px;
+  width: 60px;
+  height: 60px;
   border-radius: 5%;
   position: relative;
 }
