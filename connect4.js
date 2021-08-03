@@ -5,11 +5,17 @@ const playerDisplay = document.querySelector('#wrap div');
 const WIDTH = 7;
 const HEIGHT = 6;
 let currPlayer = 'one';
+let lockBoard = false;
+const board = [];
 
 // makes matrix of HEIGHT x WIDTH size
-// first creates a an array with 6 (HEIGHT) arrays inside, then maps through arrays and fills them with 7 (WIDTH) values of null each
-const makeBoard = (height, width) => [...Array(height)].map(() => Array(width).fill(null))
-const board = makeBoard(HEIGHT, WIDTH);
+// loops through 6 (HEIGHT) times and pushes an array with a length of 7 (WIDTH) each time, then fills the arrays with values of null
+function makeBoard() {
+  for(let i = 0; i < HEIGHT; i++) {
+    board.push([...Array(WIDTH)].fill(null));
+  }
+  return board;
+}
 
 function makeHtmlBoard() {
   
@@ -70,6 +76,9 @@ function endGame(msg) {
 // handle click of column top to play piece
 function handleClick(e) {
 
+  // if board is locked, return
+  if (lockBoard) return;
+
   // get id of clicked cell
   const x = +e.target.id;
   e.target.className = '';
@@ -86,6 +95,7 @@ function handleClick(e) {
 
   // check for win
   if (checkForWin()) {
+    lockBoard = true;
     return endGame(`Player ${currPlayer} won!`);
   }
 
@@ -111,9 +121,9 @@ function hoverPlayerColour(e) {
 }
 
 // refreshes game
-resetBtn.addEventListener('click', e => {
+resetBtn.addEventListener('click', () => {
   window.location.reload();
-})
+});
 
 
 // checkForWin: check board cell-by-cell for "does a win start here?"
@@ -142,11 +152,13 @@ function checkForWin() {
       const diagDL = [[y, x], [y + 1, x - 1], [y + 2, x - 2], [y + 3, x - 3]];
 
       if (_win(horiz) || _win(vert) || _win(diagDR) || _win(diagDL)) {
+
         return true;
       }
     }
   }
 }
 
+makeBoard();
 makeHtmlBoard();
 
