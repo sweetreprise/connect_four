@@ -1,0 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=Prompt&display=swap');
+
+
+body {
+  background-color: hsl(136, 27%, 47%);
+  font-family: Prompt, sans-serif;
+}
+
+h1 {
+  color: hsl(46, 73%, 85%);
+  text-shadow: 2px 2px 0 hsl(136, 28%, 36%);
+  text-align: center;
+  margin-bottom: 0;
+}
+
+#wrap {
+  display: flex;
+  box-sizing: border-box;
+  color: hsl(46, 73%, 85%);
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1em;
+}
+
+#wrap #reset {
+  font-family: Prompt, sans-serif;
+  background-color: hsl(235, 51%, 57%);
+  border-color: hsl(5, 63%, 51%) hsl(52, 70%, 50%) hsl(52, 70%, 50%) hsl(5, 63%, 51%);
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 5%;
+  color: hsl(46, 73%, 85%);
+  width: 7em;
+  margin-left: 8em;
+}
+
+#wrap #reset:hover {
+  background-color: hsl(235, 56%, 52%);
+}
+
+#board {
+  display: grid;
+  justify-items: center;
+  
+}
+
+#board td {
+  background-color: hsl(235, 56%, 52%);
+  width: 70px;
+  height: 70px;
+  border-radius: 5%;
+  position: relative;
+}
+
+#board td .piece {
+  width: 70%;
+  height: 70%;
+  border-radius: 50%;
+  top: 10px;
+  left: 10px;
+}
+
+#board td .piece.one {
+  background-color: hsl(52, 70%, 50%);
+  position: absolute;
+}
+
+#board td .piece.two {
+  background-color: hsl(5, 63%, 51%);
+}
+
+#board td div {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  border-radius: 50%;
+  background-color: hsl(136, 27%, 47%);
+  height: 70%;
+  width: 70%;
+}
+
+#column-top td {
+  background-color: hsl(136, 27%, 47%);
+  border: dashed 1px lightgray;
+  border-radius: 50%;
+}
+
+#column-top .player-one:hover {
+  background-color: hsl(52, 70%, 50%);
+}
+
+#column-top .player-two:hover {
+  background-color: hsl(5, 63%, 51%);
+}
