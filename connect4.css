@@ -37,6 +37,7 @@ h1 {
 
 #wrap #reset:hover {
   background-color: hsl(235, 56%, 52%);
+  cursor: pointer;
 }
 
 #board {
@@ -61,12 +62,12 @@ h1 {
   left: 15%;
 }
 
-#board td .piece.one {
+#board td .piece._1 {
   background-color: hsl(52, 70%, 50%);
   position: absolute;
 }
 
-#board td .piece.two {
+#board td .piece._2 {
   background-color: hsl(5, 63%, 51%);
 }
 
@@ -84,6 +85,10 @@ h1 {
   background-color: hsl(136, 27%, 47%);
   border: dashed 1px lightgray;
   border-radius: 50%;
+}
+
+#column-top:hover {
+  cursor: pointer;
 }
 
 #column-top .player-one:hover {

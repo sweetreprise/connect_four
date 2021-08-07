@@ -4,13 +4,14 @@ const playerDisplay = document.querySelector('#wrap div');
 
 const WIDTH = 7;
 const HEIGHT = 6;
-let currPlayer = 'one';
+let currPlayer = 1;
 let lockBoard = false;
 const board = [];
 
 // makes matrix of HEIGHT x WIDTH size
 // loops through 6 (HEIGHT) times and pushes an array with a length of 7 (WIDTH) each time, then fills the arrays with values of null
 function makeBoard() {
+  board.length = 0;
   for(let i = 0; i < HEIGHT; i++) {
     board.push([...Array(WIDTH)].fill(null));
   }
@@ -19,6 +20,7 @@ function makeBoard() {
 
 function makeHtmlBoard() {
   
+  htmlBoard.innerHTML = '';
   // creates top clickable row and listens for a click
   const top = document.createElement("tr");
   top.setAttribute("id", "column-top");
@@ -64,7 +66,7 @@ function findSpotForCol(x) {
 function placeInTable(y, x) {
   const td = document.getElementById(`${y}-${x}`)
   const piece = document.createElement('div');
-  piece.classList.add('piece', currPlayer)
+  piece.classList.add('piece', "_" + currPlayer)
   td.append(piece);
 }
 
@@ -105,7 +107,7 @@ function handleClick(e) {
   }
 
   // switches players
-  currPlayer = currPlayer === 'one' ? 'two' : 'one';
+  currPlayer = currPlayer === 1 ? 2 : 1;
   // updates current player in display
   playerDisplay.innerHTML = `Current Player: Player ${currPlayer}`
 
@@ -113,7 +115,7 @@ function handleClick(e) {
 
 // displays current player colour on hover
 function hoverPlayerColour(e) {
-  if(currPlayer === 'one') {
+  if(currPlayer === 1) {
     e.target.className = 'player-one';
     } else {
       e.target.className = 'player-two';
@@ -122,7 +124,8 @@ function hoverPlayerColour(e) {
 
 // refreshes game
 resetBtn.addEventListener('click', () => {
-  window.location.reload();
+  makeBoard();
+  makeHtmlBoard();
 });
 
 
