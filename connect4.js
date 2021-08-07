@@ -1,164 +1,175 @@
-const htmlBoard = document.getElementById('board');
-const resetBtn = document.getElementById('reset');
-const playerDisplay = document.querySelector('#wrap div');
-
-const WIDTH = 7;
-const HEIGHT = 6;
-let currPlayer = 'one';
-let lockBoard = false;
-const board = [];
-
-// makes matrix of HEIGHT x WIDTH size
-// loops through 6 (HEIGHT) times and pushes an array with a length of 7 (WIDTH) each time, then fills the arrays with values of null
-function makeBoard() {
-  for(let i = 0; i < HEIGHT; i++) {
-    board.push([...Array(WIDTH)].fill(null));
+class Game {
+  constructor(height, width) {
+    this.height = height;
+    this.width = width;
+    this.currPlayer = 1;
+    this.lockBoard = false;
+    this.makeBoard();
+    this.makeHtmlBoard();
   }
-  return board;
-}
 
-function makeHtmlBoard() {
-  
-  // creates top clickable row and listens for a click
-  const top = document.createElement("tr");
-  top.setAttribute("id", "column-top");
-  top.addEventListener("click", handleClick);
-
-  // appends cells to top row
-  for (let x = 0; x < WIDTH; x++) {
-    const headCell = document.createElement("td");
-    headCell.setAttribute("id", x);
-    top.append(headCell);
-    // added event listener to display player colour on top row hover
-    headCell.addEventListener('mousemove', hoverPlayerColour);
-  }
-  
-  htmlBoard.append(top);
-
-  // creates table rows and cells that corresponds with the width and height of the game board
-  for (let y = 0; y < HEIGHT; y++) {
-    const row = document.createElement("tr");
-    for (let x = 0; x < WIDTH; x++) {
-      const cell = document.createElement("td");
-      const div = document.createElement('div');
-      cell.setAttribute("id", `${y}-${x}`);
-      row.append(cell);
-      cell.append(div);
+  // makes matrix of HEIGHT x WIDTH size
+  // loops through 6 (HEIGHT) times and pushes an array with a length of 7 (WIDTH) each time, then fills the arrays with values of null
+  makeBoard() {
+    this.board = [];
+    for(let i = 0; i < this.height; i++) {
+      this.board.push([...Array(this.width)].fill(null));
     }
-
-    htmlBoard.append(row);
+    return this.board;
   }
-}
 
-// given column x, return top empty y (null if filled)
-function findSpotForCol(x) {
-  for(y = HEIGHT - 1; y >= 0; y--) {
-    if(board[y][x] === null) {
-      return y;
+  makeHtmlBoard() {
+    const htmlBoard = document.getElementById('board');
+    htmlBoard.innerHTML = '';
+
+    // creates top clickable row and listens for a click
+    const top = document.createElement("tr");
+    top.setAttribute("id", "column-top");
+    console.log(this)
+    top.addEventListener("click", this.handleClick);
+  
+    // appends cells to top row
+    for (let x = 0; x < this.width; x++) {
+      const headCell = document.createElement("td");
+      headCell.setAttribute("id", x);
+      top.append(headCell);
+      // added event listener to display player colour on top row hover
+      headCell.addEventListener('mousemove', this.hoverPlayerColour);
+    }
+    
+    htmlBoard.append(top);
+  
+    // creates table rows and cells that corresponds with the width and height of the game board
+    for (let y = 0; y < this.height; y++) {
+      const row = document.createElement("tr");
+      for (let x = 0; x < this.width; x++) {
+        const cell = document.createElement("td");
+        const div = document.createElement('div');
+        cell.setAttribute("id", `${y}-${x}`);
+        cell.append(div);
+        row.append(cell);
+      }
+  
+      htmlBoard.append(row);
     }
   }
-  return null;
-}
 
-// update DOM to place piece into HTML table of board
-function placeInTable(y, x) {
-  const td = document.getElementById(`${y}-${x}`)
-  const piece = document.createElement('div');
-  piece.classList.add('piece', currPlayer)
-  td.append(piece);
-}
+  // given column x, return top empty y (null if filled)
+  findSpotForCol(x) {
+    console.log(this)
+    for(y = this.height - 1; y >= 0; y--) {
+      if(this.board[y][x] === null) {
+        return y;
+      }
+    }
+    return null;
+  }
 
-// announce end of game
-function endGame(msg) {
-  alert(msg)
-}
+  // update DOM to place piece into HTML table of board
+  placeInTable(y, x) {
+    const td = document.getElementById(`${y}-${x}`)
+    const piece = document.createElement('div');
+    piece.classList.add('piece', this.currPlayer)
+    td.append(piece);
+  }
 
-// handle click of column top to play piece
-function handleClick(e) {
+  // announce end of game
+  endGame(msg) {
+    alert(msg)
+  }
 
-  // if board is locked, return
-  if (lockBoard) return;
-
-  // get id of clicked cell
-  const x = +e.target.id;
-  e.target.className = '';
+  handleClick(e) {
+    console.log(this)
+    // if board is locked, return
+    if (this.lockBoard) return;
   
-  // get next spot in column (if none, ignore click)
-  const y = findSpotForCol(x);
-  if (y === null) {
-    return;
+    // get id of clicked cell
+    const x = +e.target.id;
+    e.target.className = '';
+    
+    // get next spot in column (if none, ignore click)
+    const y = this.findSpotForCol(x);
+    if (y === null) {
+      return;
+    }
+  
+    this.placeInTable(y, x);
+    // updates board variable
+    this.board[y][x] = this.currPlayer;
+  
+    // check for win
+    if (this.checkForWin()) {
+      this.lockBoard = true;
+      return this.endGame(`Player ${this.currPlayer} won!`);
+    }
+  
+    // check for tie
+    if(this.board.every(row => row.every(val => val))) {
+      return this.endGame('You have tied!');
+    }
+  
+    // switches players
+    this.currPlayer = this.currPlayer === 1 ? 2 : 1;
+    // updates current player in display
+    playerDisplay.innerHTML = `Current Player: Player ${this.currPlayer}`
+  
   }
 
-  placeInTable(y, x);
-  // updates board variable
-  board[y][x] = currPlayer;
 
-  // check for win
-  if (checkForWin()) {
-    lockBoard = true;
-    return endGame(`Player ${currPlayer} won!`);
-  }
-
-  // check for tie
-  if(board.every(row => row.every(val => val))) {
-    return endGame('You have tied!');
-  }
-
-  // switches players
-  currPlayer = currPlayer === 'one' ? 'two' : 'one';
-  // updates current player in display
-  playerDisplay.innerHTML = `Current Player: Player ${currPlayer}`
-
-}
-
-// displays current player colour on hover
-function hoverPlayerColour(e) {
-  if(currPlayer === 'one') {
-    e.target.className = 'player-one';
-    } else {
-      e.target.className = 'player-two';
-  }
-}
-
-// refreshes game
-resetBtn.addEventListener('click', () => {
-  window.location.reload();
-});
-
-
-// checkForWin: check board cell-by-cell for "does a win start here?"
-function checkForWin() {
-  function _win(cells) {
-    // Check four cells to see if they're all color of current player
-    //  - cells: list of four (y, x) cells
-    //  - returns true if all are legal coordinates & all match currPlayer
-
-    return cells.every(
-      ([y, x]) =>
-        y >= 0 &&
-        y < HEIGHT &&
-        x >= 0 &&
-        x < WIDTH &&
-        board[y][x] === currPlayer
-    );
-  }
-
-  // checks for wins roziontally, vertically and diagonally (right and left)
-  for (let y = 0; y < HEIGHT; y++) {
-    for (let x = 0; x < WIDTH; x++) {
-      const horiz = [[y, x], [y, x + 1], [y, x + 2], [y, x + 3]];
-      const vert = [[y, x], [y + 1, x], [y + 2, x], [y + 3, x]];
-      const diagDR = [[y, x], [y + 1, x + 1], [y + 2, x + 2], [y + 3, x + 3]];
-      const diagDL = [[y, x], [y + 1, x - 1], [y + 2, x - 2], [y + 3, x - 3]];
-
-      if (_win(horiz) || _win(vert) || _win(diagDR) || _win(diagDL)) {
-
-        return true;
+  checkForWin() {
+    function _win(cells) {
+      // Check four cells to see if they're all color of current player
+      //  - cells: list of four (y, x) cells
+      //  - returns true if all are legal coordinates & all match currPlayer
+  
+      return cells.every(
+        ([y, x]) =>
+          y >= 0 &&
+          y < this.height &&
+          x >= 0 &&
+          x < this.width &&
+          this.board[y][x] === this.currPlayer
+      );
+    }
+  
+    // checks for wins roziontally, vertically and diagonally (right and left)
+    for (let y = 0; y < this.height; y++) {
+      for (let x = 0; x < this.width; x++) {
+        const horiz = [[y, x], [y, x + 1], [y, x + 2], [y, x + 3]];
+        const vert = [[y, x], [y + 1, x], [y + 2, x], [y + 3, x]];
+        const diagDR = [[y, x], [y + 1, x + 1], [y + 2, x + 2], [y + 3, x + 3]];
+        const diagDL = [[y, x], [y + 1, x - 1], [y + 2, x - 2], [y + 3, x - 3]];
+  
+        if (_win(horiz) || _win(vert) || _win(diagDR) || _win(diagDL)) {
+  
+          return true;
+        }
       }
     }
   }
+
+  hoverPlayerColour(e) {
+    if(this.currPlayer === 1) {
+      e.target.className = 'player-one';
+      } else {
+        e.target.className = 'player-two';
+    }
+  }
+
 }
 
-makeBoard();
-makeHtmlBoard();
+
+
+// const resetBtn = document.getElementById('reset');
+// const playerDisplay = document.querySelector('#wrap div');
+
+
+// refreshes game
+// resetBtn.addEventListener('click', () => {
+//   window.location.reload();
+// });
+
+
+new Game(6, 7);
+
 
