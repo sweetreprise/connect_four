@@ -1,4 +1,3 @@
-const htmlBoard = document.getElementById('board');
 const resetBtn = document.getElementById('reset');
 const playerDisplay = document.querySelector('#wrap div');
 
@@ -19,6 +18,7 @@ function makeBoard() {
 }
 
 function makeHtmlBoard() {
+  const htmlBoard = document.getElementById('board');
   
   htmlBoard.innerHTML = '';
   // creates top clickable row and listens for a click
@@ -44,8 +44,8 @@ function makeHtmlBoard() {
       const cell = document.createElement("td");
       const div = document.createElement('div');
       cell.setAttribute("id", `${y}-${x}`);
-      row.append(cell);
       cell.append(div);
+      row.append(cell);
     }
 
     htmlBoard.append(row);
