@@ -81,20 +81,20 @@ h1 {
   width: 70%;
 }
 
-#column-top td {
+#row-top td {
   background-color: hsl(136, 27%, 47%);
   border: dashed 1px lightgray;
   border-radius: 50%;
 }
 
-#column-top:hover {
+#row-top:hover {
   cursor: pointer;
 }
 
-#column-top .player-one:hover {
+#row-top .player-1:hover {
   background-color: hsl(52, 70%, 50%);
 }
 
-#column-top .player-two:hover {
+#row-top .player-2:hover {
   background-color: hsl(5, 63%, 51%);
 }

@@ -1,6 +1,4 @@
 const resetBtn = document.getElementById('reset');
-const playerDisplay = document.querySelector('#wrap div');
-
 const WIDTH = 7;
 const HEIGHT = 6;
 let currPlayer = 1;
@@ -22,20 +20,20 @@ function makeHtmlBoard() {
   
   htmlBoard.innerHTML = '';
   // creates top clickable row and listens for a click
-  const top = document.createElement("tr");
-  top.setAttribute("id", "column-top");
-  top.addEventListener("click", handleClick);
+  const topRow = document.createElement("tr");
+  topRow.setAttribute("id", "row-top");
+  topRow.addEventListener("click", handleClick);
 
   // appends cells to top row
   for (let x = 0; x < WIDTH; x++) {
     const headCell = document.createElement("td");
     headCell.setAttribute("id", x);
-    top.append(headCell);
+    topRow.append(headCell);
     // added event listener to display player colour on top row hover
     headCell.addEventListener('mousemove', hoverPlayerColour);
   }
   
-  htmlBoard.append(top);
+  htmlBoard.append(topRow);
 
   // creates table rows and cells that corresponds with the width and height of the game board
   for (let y = 0; y < HEIGHT; y++) {
@@ -64,16 +62,33 @@ function findSpotForCol(x) {
 
 // update DOM to place piece into HTML table of board
 function placeInTable(y, x) {
-  const td = document.getElementById(`${y}-${x}`)
+  const spot = document.getElementById(`${y}-${x}`);
   const piece = document.createElement('div');
-  piece.classList.add('piece', "_" + currPlayer)
-  td.append(piece);
+  piece.classList.add('piece', `_${currPlayer}`);
+  spot.append(piece);
 }
 
 // announce end of game
-function endGame(msg) {
+function showMessage(msg) {
   alert(msg)
 }
+
+// updates current player in display
+function displayCurrentPlayer() {
+  const playerDisplay = document.querySelector('#wrap div');
+  playerDisplay.innerHTML = `Current Player: Player ${currPlayer}`
+}
+
+// displays current player colour on hover
+function hoverPlayerColour(e) {
+  e.target.className = `player-${currPlayer}`
+}
+
+// refreshes game
+resetBtn.addEventListener('click', () => {
+  makeBoard();
+  makeHtmlBoard();
+});
 
 // handle click of column top to play piece
 function handleClick(e) {
@@ -98,35 +113,19 @@ function handleClick(e) {
   // check for win
   if (checkForWin()) {
     lockBoard = true;
-    return endGame(`Player ${currPlayer} won!`);
+    showMessage(`Player ${currPlayer} won!`);
   }
 
   // check for tie
-  if(board.every(row => row.every(val => val))) {
-    return endGame('You have tied!');
+  if(board[0].every(val => val)) {
+    showMessage('You have tied!');
   }
 
   // switches players
   currPlayer = currPlayer === 1 ? 2 : 1;
   // updates current player in display
-  playerDisplay.innerHTML = `Current Player: Player ${currPlayer}`
-
+  displayCurrentPlayer() 
 }
-
-// displays current player colour on hover
-function hoverPlayerColour(e) {
-  if(currPlayer === 1) {
-    e.target.className = 'player-one';
-    } else {
-      e.target.className = 'player-two';
-  }
-}
-
-// refreshes game
-resetBtn.addEventListener('click', () => {
-  makeBoard();
-  makeHtmlBoard();
-});
 
 
 // checkForWin: check board cell-by-cell for "does a win start here?"
