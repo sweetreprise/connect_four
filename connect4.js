@@ -81,11 +81,16 @@ function displayCurrentPlayer() {
 
 // displays current player colour on hover
 function hoverPlayerColour(e) {
+  if(lockBoard) {
+    e.target.className = '';
+    return;
+  }
   e.target.className = `player-${currPlayer}`
 }
 
 // refreshes game
 resetBtn.addEventListener('click', () => {
+  lockBoard = false;
   makeBoard();
   makeHtmlBoard();
 });
@@ -113,7 +118,7 @@ function handleClick(e) {
   // check for win
   if (checkForWin()) {
     lockBoard = true;
-    showMessage(`Player ${currPlayer} won!`);
+    setTimeout(() => {showMessage(`Player ${currPlayer} won!`)}, 200);
   }
 
   // check for tie
