@@ -84,11 +84,13 @@ class Game {
     alert(msg)
   }
 
+  // updates playerDisplay variable to display correct player
   displayCurrentPlayer() {
     const playerDisplay = document.querySelector('#wrap div');
     playerDisplay.innerHTML = `Current Player: Player ${this.currPlayer}`
   }
 
+  // displays player colour on hover
   hoverPlayerColour(e) {
     if(this.lockBoard) {
       e.target.className = '';
@@ -97,10 +99,12 @@ class Game {
     e.target.className = `player-${this.currPlayer}`
   }
 
+  // switches player variable
   switchPlayer() {
     this.currPlayer = this.currPlayer === 1 ? 2 : 1;
   }
 
+  // restarts game
   reset() {
       this.lockBoard = false;
       this.currPlayer = 1;
@@ -109,7 +113,7 @@ class Game {
       this.makeHtmlBoard();
   }
 
-
+  // handles click
   handleClick(e) {
     // if board is locked, return
     if (this.lockBoard) return;
@@ -139,15 +143,12 @@ class Game {
     if(this.board[0].every(val => val)) {
       setTimeout(() => {this.showMessage(`You have tied!`)}, 200);
     }
-  
-    // switches players
-    // this.currPlayer = this.currPlayer === 1 ? 2 : 1;
+
     this.switchPlayer();
-    // updates current player in display
     this.displayCurrentPlayer();
   }
 
-
+  // checks for win
   checkForWin() {
     const _win = cells =>
       // Check four cells to see if they're all color of current player
