@@ -1,4 +1,3 @@
-const resetBtn = document.getElementById('reset');
 const WIDTH = 7;
 const HEIGHT = 6;
 let currPlayer = 1;
@@ -48,6 +47,10 @@ function makeHtmlBoard() {
 
     htmlBoard.append(row);
   }
+
+  // reset
+  const resetBtn = document.getElementById('reset');
+  resetBtn.addEventListener('click', reset);
 }
 
 // given column x, return top empty y (null if filled)
@@ -88,12 +91,19 @@ function hoverPlayerColour(e) {
   e.target.className = `player-${currPlayer}`
 }
 
-// refreshes game
-resetBtn.addEventListener('click', () => {
+//switches players
+function switchPlayer() {
+  currPlayer = currPlayer === 1 ? 2 : 1;
+}
+
+// resets game
+function reset() {
   lockBoard = false;
+  currPlayer = 1;
+  displayCurrentPlayer();
   makeBoard();
   makeHtmlBoard();
-});
+}
 
 // handle click of column top to play piece
 function handleClick(e) {
@@ -118,17 +128,17 @@ function handleClick(e) {
   // check for win
   if (checkForWin()) {
     lockBoard = true;
-    setTimeout(() => {showMessage(`Player ${currPlayer} won!`)}, 200);
+    let winner = currPlayer;
+    setTimeout(() => {showMessage(`Player ${winner} won!`)}, 200);
   }
 
   // check for tie
   if(board[0].every(val => val)) {
     showMessage('You have tied!');
+    setTimeout(() => {showMessage(`You have tied!`)}, 200)
   }
 
-  // switches players
-  currPlayer = currPlayer === 1 ? 2 : 1;
-  // updates current player in display
+  switchPlayer();
   displayCurrentPlayer() 
 }
 
