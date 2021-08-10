@@ -55,7 +55,7 @@ function makeHtmlBoard() {
 
 // given column x, return top empty y (null if filled)
 function findSpotForCol(x) {
-  for(y = HEIGHT - 1; y >= 0; y--) {
+  for(let y = HEIGHT - 1; y >= 0; y--) {
     if(board[y][x] === null) {
       return y;
     }
