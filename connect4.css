@@ -61,12 +61,12 @@ h1 {
   left: 15%;
 }
 
-#board td .piece.one {
+#board td .piece._1 {
   background-color: hsl(52, 70%, 50%);
   position: absolute;
 }
 
-#board td .piece.two {
+#board td .piece._2 {
   background-color: hsl(5, 63%, 51%);
 }
 
@@ -80,16 +80,16 @@ h1 {
   width: 70%;
 }
 
-#column-top td {
+#row-top td {
   background-color: hsl(136, 27%, 47%);
   border: dashed 1px lightgray;
   border-radius: 50%;
 }
 
-#column-top .player-one:hover {
+#row-top .player-1:hover {
   background-color: hsl(52, 70%, 50%);
 }
 
-#column-top .player-two:hover {
+#row-top .player-2:hover {
   background-color: hsl(5, 63%, 51%);
 }
